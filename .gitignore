@@ -1,0 +1,5 @@
+# 26 MB，含样式图片；可按核实记录里的 URL 和 MD5 重新取
+_sources/nyukan_kisoku.xml
+.DS_Store
+# 8 MB，取了没引用；可重新取
+_sources/roukisoku.xml
