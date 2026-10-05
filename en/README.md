@@ -3,7 +3,7 @@
 # A Cost-Effective Life in Japan: a guide for Chinese residents
 
 How to keep your residence status in Japan. What the law gives you when you work and when you leave a job. How pension, health insurance and tax work, and what you can get back. Which obligations remain on the Chinese side while you live in Japan. Renting, parents back in China, and the order in which to wind things up when you return.<br>
-82 items. Each one states what it costs, what you get back, and which statute or official document supports it.
+84 items. Each one states what it costs, what you get back, and which statute or official document supports it.
 
 You do not need to do all of it. This is a menu sorted by value for effort, not a to-do list.
 
@@ -52,7 +52,7 @@ Fields in each item: Cost / In plain words / Benefit / Evidence / Sources / Note
 | B | Has support but is hard to quantify, or rests on a single source |
 | C | The author's experience or common wisdom, with no original text to check |
 
-All 82 items are currently grade A. That is because only matters that can be tied to an original text have been written so far. Topics that depend on case law and practice, such as key money, renewal fees and guarantor companies, are not yet covered.
+All 84 items are currently grade A. That is because only matters that can be tied to an original text have been written so far. Topics that depend on case law and practice, such as key money, renewal fees and guarantor companies, are not yet covered.
 
 Grade A only means "this sentence is in the original text". A right written in the law is not the same as getting it the moment you ask.
 
