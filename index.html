@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>在日华人版 高性价比人生指南 · 检索</title>
+<style>
+:root{--bg:#fbfaf7;--fg:#1f2328;--mut:#5c6370;--line:#dedbd2;--card:#fff;--acc:#2f5d8a;--tag:#eef1f4;--warn:#8a5a00}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#15171a;--fg:#e6e3dc;--mut:#9aa0a8;--line:#30343a;--card:#1c1f23;--acc:#8ab4dc;--tag:#262a30;--warn:#e0b060}}
+:root[data-theme=dark]{--bg:#15171a;--fg:#e6e3dc;--mut:#9aa0a8;--line:#30343a;--card:#1c1f23;--acc:#8ab4dc;--tag:#262a30;--warn:#e0b060}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.7 -apple-system,"Hiragino Sans","PingFang SC","Noto Sans CJK SC","Yu Gothic",system-ui,sans-serif}
+header,main{max-width:920px;margin:0 auto;padding:0 16px}
+header{padding-top:28px}
+h1{font-size:1.5rem;margin:0 0 4px}
+.sub{color:var(--mut);margin:0 0 14px;font-size:.95rem}
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0}
+input[type=search]{flex:1 1 240px;padding:9px 12px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--fg);font:inherit}
+select,button{padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--fg);font:inherit;font-size:.9rem}
+button.on{border-color:var(--acc);color:var(--acc)}
+.count{color:var(--mut);font-size:.9rem;margin:6px 0 14px}
+.sec{margin:26px 0 8px;font-size:1.1rem;border-bottom:1px solid var(--line);padding-bottom:4px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin:10px 0}
+.card h3{margin:0 0 6px;font-size:1.02rem;line-height:1.5}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 8px}
+.tag{background:var(--tag);border-radius:999px;padding:1px 9px;font-size:.78rem;color:var(--mut);white-space:nowrap}
+.tag.r{color:var(--acc)}
+.plain{margin:0 0 6px}
+details{margin-top:6px}
+summary{cursor:pointer;color:var(--acc);font-size:.9rem}
+dl{margin:8px 0 0}
+dt{font-weight:600;font-size:.86rem;color:var(--mut);margin-top:8px}
+dd{margin:2px 0 0;overflow-wrap:anywhere;font-size:.94rem}
+dd a{color:var(--acc)}
+.note{color:var(--warn);font-size:.86rem;border:1px solid var(--line);border-radius:8px;padding:8px 12px;margin:12px 0}
+footer{max-width:920px;margin:30px auto;padding:0 16px 40px;color:var(--mut);font-size:.84rem}
+footer a{color:var(--acc)}
+</style>
+</head>
+<body>
+<header>
+  <h1 id="t-title"></h1>
+  <p class="sub" id="t-sub"></p>
+  <div class="bar">
+    <select id="lang" aria-label="language"><option value="zh">中文（正本）</option><option value="ja">日本語</option><option value="en">English</option></select>
+    <input type="search" id="q" autocomplete="off">
+  </div>
+  <div class="bar">
+    <select id="f-sec"></select>
+    <select id="f-kj"></select>
+    <select id="f-ratio"></select>
+    <button id="f-free" type="button"></button>
+    <button id="f-quick" type="button"></button>
+    <button id="f-easy" type="button"></button>
+  </div>
+  <p class="note" id="t-note"></p>
+  <p class="count" id="count"></p>
+</header>
+<main id="list"></main>
+<footer id="t-foot"></footer>
+<script>
+// 数据直接取自各语言目录下的正文。性价比档的算法仿照原书：成本分 = 钱 + 时间 + 毅力。
+const FILES = {
+  zh: {dir:'book', files:['01-在留与身份.md','02-在日本上班与离职.md','03-在日本的钱.md','04-两头的义务.md','05-租房.md','06-父母在国内.md','07-回国那一步.md']},
+  ja: {dir:'ja/book', files:['01-在留と身分.md','02-日本で働く・辞める.md','03-日本のお金.md','04-二つの国の義務.md','05-部屋を借りる.md','06-親は中国に.md','07-帰国するとき.md']},
+  en: {dir:'en/book', files:['01-residence-status.md','02-working-and-leaving-a-job.md','03-money-in-japan.md','04-obligations-in-both-countries.md','05-renting.md','06-parents-in-china.md','07-returning-to-china.md']}
+};
+const FIELDS = {zh:['成本','说人话','收益','证据等级','来源','备注'], ja:['コスト','ひとことで','根拠','証拠レベル','出典','備考'], en:['Cost','In plain words','Benefit','Evidence','Sources','Notes']};
+const COST_W = {money:{'0':0,'少':1,'多':2}, time:{'少':0,'中':1,'多':2}, will:{'否':0,'些':1,'是':2}};
+const UI = {
+  zh:{title:'在日华人版 高性价比人生指南', sub:'在日本生活的中国籍读者用的备选单：每条写明花掉什么、换回什么、依据是哪一条原文。', q:'搜关键词：永住、脱退一時金、押金…', allSec:'全部章节', allKj:'换回什么：全部', allR:'性价比：全部', free:'不花钱', quick:'花时间少', easy:'不靠毅力', n:(a,b)=>`显示 ${a} 条，共 ${b} 条`, more:'成本、依据和来源', note:'这是初稿，不是专业意见。正文里写着「没核到原文」的地方还没有核实；个案请问入管、税务署、年金事务所或专业人士。', foot:'体例来自 <a href="https://github.com/eternity4719/HowToLiveBetter">高性价比人生指南</a>（eternity4719，CC BY 4.0），条目按日本和中国的法令原文新写。中文是正本，译本有出入时以中文为准。', kj:{'死亡率':'换寿命','金钱':'换钱','时间':'换时间精力','自由':'换人身自由'}, ratio:{'极高':'极高','高':'高','一般':'一般'}, lv:'证据'},
+  ja:{title:'在日中国人のための「コスパのよい生き方」ガイド', sub:'日本で暮らす中国籍の読者向けの選択肢リスト。各項目に、かかるもの・得られるもの・根拠となる原文を示します。', q:'キーワード：永住、脱退一時金、敷金…', allSec:'すべての節', allKj:'得られるもの：すべて', allR:'コスパ：すべて', free:'お金がかからない', quick:'時間が少ない', easy:'根気が要らない', n:(a,b)=>`${b} 件中 ${a} 件を表示`, more:'コスト・根拠・出典', note:'初稿であり、専門的な助言ではありません。本文に「原文を確認していません」とある箇所は未確認です。個別の事案は入管・税務署・年金事務所または専門家に確認してください。', foot:'構成は <a href="https://github.com/eternity4719/HowToLiveBetter">高性价比人生指南</a>（eternity4719、CC BY 4.0）に倣い、項目は日本と中国の法令原文に基づいて新たに書いたものです。中国語版が正本で、相違がある場合は中国語版が優先します。', kj:{'死亡率':'寿命','金钱':'お金','时间':'時間と気力','自由':'身体の自由'}, ratio:{'极高':'とても高い','高':'高い','一般':'ふつう'}, lv:'証拠'},
+  en:{title:'A Cost-Effective Life in Japan: a guide for Chinese residents', sub:'A menu of options for Chinese nationals living in Japan. Each item states what it costs, what you get back, and which original text supports it.', q:'Search: permanent residence, pension, deposit…', allSec:'All sections', allKj:'What you get back: all', allR:'Value: all', free:'Costs no money', quick:'Takes little time', easy:'Needs no willpower', n:(a,b)=>`Showing ${a} of ${b} items`, more:'Cost, basis and sources', note:'This is a first draft, not professional advice. Wherever the text says something was not verified against the original, it has not been. For your own case, ask Immigration, the tax office, the pension office or a professional.', foot:'The format follows <a href="https://github.com/eternity4719/HowToLiveBetter">高性价比人生指南 (HowToLiveBetter)</a> by eternity4719, CC BY 4.0. The items were newly written from Japanese and Chinese legal texts. The Chinese version is authoritative; where versions differ, the Chinese text prevails.', kj:{'死亡率':'Lifespan','金钱':'Money','时间':'Time and energy','自由':'Personal liberty'}, ratio:{'极高':'Very high','高':'High','一般':'Moderate'}, lv:'Evidence'}
+};
+const $ = id => document.getElementById(id);
+const esc = s => s.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const linkify = s => esc(s).replace(/&lt;(https?:\/\/[^&\s]+)&gt;/g,'<a href="$1" rel="noopener">$1</a>').replace(/(^|[\s（(])(https?:\/\/[^\s<）)]+)/g,'$1<a href="$2" rel="noopener">$2</a>');
+let DATA = [], lang = 'zh', flags = {free:false, quick:false, easy:false};
+
+function parse(md, secNo, L){
+  const secTitle = (md.match(/^# (.+)$/m)||[,''])[1];
+  const out = []; const re = /^### (\d+)\. (.+)\n([\s\S]*?)(?=^### |\s*$(?![\s\S]))/gm; let m;
+  while((m = re.exec(md))){
+    const body = m[3]; const t = body.match(/成本标签: 钱=(\S+) 时间=(\S+) 毅力=(\S+) 收益=(\S+) 口径=(\S+) -->/);
+    const f = {}; FIELDS[L].forEach((k,i)=>{ const r = new RegExp('^- '+k.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'[：:]\\s*(.*)$','m').exec(body); f[i] = r ? r[1] : ''; });
+    const e = {sec:secNo, secTitle, n:+m[1], title:m[2].trim(), f, money:t?t[1]:'', time:t?t[2]:'', will:t?t[3]:'', level:t?t[4]:'', kj:t?t[5]:''};
+    e.cs = (COST_W.money[e.money]??0) + (COST_W.time[e.time]??0) + (COST_W.will[e.will]??0);
+    e.ratio = e.level==='大' ? (e.cs===0?'极高':(e.cs<=2?'高':'一般')) : (e.level==='中' ? (e.cs===0?'高':'一般') : '一般');
+    e.text = (e.title+' '+Object.values(f).join(' ')).toLowerCase();
+    out.push(e);
+  }
+  return out;
+}
+async function load(L){
+  const cfg = FILES[L]; const all = [];
+  for(let i=0;i<cfg.files.length;i++){
+    try{ const r = await fetch(cfg.dir+'/'+encodeURIComponent(cfg.files[i])); if(!r.ok) continue; all.push(...parse(await r.text(), i+1, L)); }catch(e){}
+  }
+  return all;
+}
+function fillUI(){
+  const u = UI[lang]; document.documentElement.lang = lang==='zh'?'zh-CN':lang;
+  $('t-title').textContent = u.title; document.title = u.title; $('t-sub').textContent = u.sub; $('q').placeholder = u.q;
+  $('t-note').textContent = u.note; $('t-foot').innerHTML = u.foot;
+  $('f-free').textContent = u.free; $('f-quick').textContent = u.quick; $('f-easy').textContent = u.easy;
+  const secs = [...new Map(DATA.map(e=>[e.sec,e.secTitle])).entries()];
+  $('f-sec').innerHTML = `<option value="">${u.allSec}</option>` + secs.map(([n,t])=>`<option value="${n}">${esc(t)}</option>`).join('');
+  $('f-kj').innerHTML = `<option value="">${u.allKj}</option>` + Object.entries(u.kj).map(([k,v])=>`<option value="${k}">${v}</option>`).join('');
+  $('f-ratio').innerHTML = `<option value="">${u.allR}</option>` + Object.entries(u.ratio).map(([k,v])=>`<option value="${k}">${v}</option>`).join('');
+}
+function render(){
+  const u = UI[lang]; const q = $('q').value.trim().toLowerCase().split(/\s+/).filter(Boolean);
+  const sec = $('f-sec').value, kj = $('f-kj').value, ratio = $('f-ratio').value;
+  const hit = DATA.filter(e => (!sec || e.sec==sec) && (!kj || e.kj===kj) && (!ratio || e.ratio===ratio)
+    && (!flags.free || e.money==='0') && (!flags.quick || e.time==='少') && (!flags.easy || e.will==='否') && q.every(w=>e.text.includes(w)));
+  $('count').textContent = u.n(hit.length, DATA.length);
+  let html = '', cur = 0; const F = FIELDS[lang];
+  for(const e of hit){
+    if(e.sec!==cur){ cur = e.sec; html += `<h2 class="sec">${esc(e.secTitle)}</h2>`; }
+    html += `<article class="card" id="s${e.sec}-${e.n}"><h3>${e.sec}.${e.n} ${esc(e.title)}</h3>
+<div class="tags"><span class="tag r">${u.ratio[e.ratio]}</span><span class="tag">${u.kj[e.kj]||''}</span><span class="tag">${u.lv} ${esc((e.f[3]||'').slice(0,1))}</span></div>
+<p class="plain">${esc(e.f[1])}</p>
+<details><summary>${u.more}</summary><dl>
+<dt>${F[0]}</dt><dd>${esc(e.f[0])}</dd><dt>${F[2]}</dt><dd>${esc(e.f[2])}</dd><dt>${F[4]}</dt><dd>${linkify(e.f[4])}</dd><dt>${F[5]}</dt><dd>${esc(e.f[5])}</dd></dl></details></article>`;
+  }
+  $('list').innerHTML = html;
+}
+async function setLang(L){ lang = L; $('lang').value = L; DATA = await load(L); fillUI(); render(); try{ localStorage.setItem('zg-lang', L); }catch(e){} }
+['q','f-sec','f-kj','f-ratio'].forEach(id => $(id).addEventListener('input', render));
+[['f-free','free'],['f-quick','quick'],['f-easy','easy']].forEach(([id,k]) => $(id).addEventListener('click', ()=>{ flags[k]=!flags[k]; $(id).classList.toggle('on', flags[k]); render(); }));
+$('lang').addEventListener('change', e => setLang(e.target.value));
+let init = 'zh'; try{ init = new URLSearchParams(location.search).get('lang') || localStorage.getItem('zg-lang') || 'zh'; }catch(e){}
+setLang(FILES[init] ? init : 'zh');
+</script>
+</body>
+</html>

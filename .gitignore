@@ -1,8 +1,3 @@
-# 26 MB，含样式图片；可按核实记录里的 URL 和 MD5 重新取
-_sources/nyukan_kisoku.xml
+# 取回的官方页面原件只留在本机，不进版本库（见 CLAUDE.md）
+_sources/
 .DS_Store
-# 8 MB，取了没引用；可重新取
-_sources/roukisoku.xml
-# 18 MB 和 13 MB；可重新取
-_sources/shotokuzeihou.xml
-_sources/chihouzeihou.xml
