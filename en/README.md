@@ -11,6 +11,8 @@ You do not need to do all of it. This is a menu sorted by value for effort, not 
 
 [中文（正本）](../README.md) · [日本語](../ja/README.md) · **English**
 
+### [Open the online search page](https://polyketide.github.io/zainichi-guide/?lang=en)
+
 </div>
 
 ---
@@ -34,7 +36,7 @@ Sleep, energy, first aid, principles of personal finance and study methods rest 
 ## How to read
 
 - **You do not need to do all of it.** Pick the one or two items that matter to you now.
-- **Filter by condition.** Run `python3 -m http.server 8000` in the repository root and open `http://localhost:8000/?lang=en`. You can filter by keyword, section, what you get back, and value tier.
+- **Filter by condition.** Open the [online search page](https://polyketide.github.io/zainichi-guide/?lang=en). To run it yourself, run `python3 -m http.server 8000` in the repository root and open `http://localhost:8000/?lang=en`. You can filter by keyword, section, what you get back, and value tier.
 - **Read one line.** Each item has an "In plain words" line that uses only what is already in the "Benefit" field.
 - **"Not verified against the original text"** means no official text was found that could be checked sentence by sentence, so no conclusion was written. It does not mean "no problem".
 - **Your own case.** This guide gives only the general position. Whether your application will be approved or how much tax you owe is a question for Immigration, the tax office, the pension office, your municipal office, or an administrative scrivener, tax accountant or lawyer.
@@ -54,6 +56,10 @@ All 69 items are currently grade A. That is because only matters that can be tie
 Grade A only means "this sentence is in the original text". A right written in the law is not the same as getting it the moment you ask.
 
 **Currency of information.** Amounts and deadlines carry the date or fiscal year they apply to. The guide as a whole is current as of 2026-10-05. Check the pages in the Sources field before you rely on anything.
+
+## License
+
+This repository is published under [CC BY 4.0](../LICENSE). You may share, adapt and use it commercially. When you do, credit the source ("在日华人版 高性价比人生指南", https://github.com/polyketide/zainichi-guide ), link to the license (https://creativecommons.org/licenses/by/4.0/ ), and say so if you changed anything. Please keep the attribution to the original book below as well.
 
 ## Attribution
 
