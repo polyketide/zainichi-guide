@@ -3,3 +3,6 @@ _sources/nyukan_kisoku.xml
 .DS_Store
 # 8 MB，取了没引用；可重新取
 _sources/roukisoku.xml
+# 18 MB 和 13 MB；可重新取
+_sources/shotokuzeihou.xml
+_sources/chihouzeihou.xml
