@@ -56,6 +56,8 @@ All 84 items are currently grade A. That is because only matters that can be tie
 
 Grade A only means "this sentence is in the original text". A right written in the law is not the same as getting it the moment you ask.
 
+Scholarships that international students and new doctorate holders can apply for are collected in [docs/scholarship-overview](docs/scholarship-overview.md): the government scholarship, JASSO, the JSPS DC fellowships and the two postdoctoral fellowships, local governments and private foundations, with amounts, who can apply, where to apply, and which schemes international students cannot get.
+
 **Currency of information.** Amounts and deadlines carry the date or fiscal year they apply to. The guide as a whole is current as of 2026-10-05. Check the pages in the Sources field before you rely on anything.
 
 ## License
